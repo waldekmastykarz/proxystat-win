@@ -31,17 +31,42 @@ public class TrayIconManager : IDisposable
     private void LoadIcons()
     {
         // Load icons from embedded resources (copied from macOS project)
-        _activeIcon = LoadIconFromResource("ProxyStat.Resources.ProxyWhiteActive.png");
-        _inactiveIcon = LoadIconFromResource("ProxyStat.Resources.ProxyInactive.png");
+        // Active icon gets an orange circular background for visibility
+        _activeIcon = LoadIconFromResource("ProxyStat.Resources.ProxyWhiteActive.png", withOrangeBackground: true);
+        _inactiveIcon = LoadIconFromResource("ProxyStat.Resources.ProxyInactive.png", withOrangeBackground: false);
     }
 
-    private static Icon? LoadIconFromResource(string resourceName)
+    private static Icon? LoadIconFromResource(string resourceName, bool withOrangeBackground)
     {
         var assembly = Assembly.GetExecutingAssembly();
         using var stream = assembly.GetManifestResourceStream(resourceName);
         if (stream == null) return null;
         
-        using var bitmap = new Bitmap(stream);
+        using var originalBitmap = new Bitmap(stream);
+        
+        if (!withOrangeBackground)
+        {
+            return Icon.FromHandle(originalBitmap.GetHicon());
+        }
+
+        // Create a new bitmap with orange square background
+        var size = Math.Max(originalBitmap.Width, originalBitmap.Height);
+        using var bitmap = new Bitmap(size, size);
+        using var graphics = Graphics.FromImage(bitmap);
+        
+        // Enable anti-aliasing for smooth edges
+        graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+        graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        
+        // Draw orange square background (matching macOS app color)
+        using var orangeBrush = new SolidBrush(Color.FromArgb(255, 237, 137, 54)); // #ED8936 orange
+        graphics.FillRectangle(orangeBrush, 0, 0, size, size);
+        
+        // Draw the white icon centered on top
+        var x = (size - originalBitmap.Width) / 2;
+        var y = (size - originalBitmap.Height) / 2;
+        graphics.DrawImage(originalBitmap, x, y, originalBitmap.Width, originalBitmap.Height);
+        
         return Icon.FromHandle(bitmap.GetHicon());
     }
 
@@ -62,6 +87,11 @@ public class TrayIconManager : IDisposable
         proxySettingsItem.Click += OnOpenProxySettings;
         proxySettingsItem.ShortcutKeyDisplayString = "Ctrl+,";
         contextMenu.Items.Add(proxySettingsItem);
+        
+        // "Disable Proxy" menu item
+        var disableProxyItem = new ToolStripMenuItem("Disable Proxy");
+        disableProxyItem.Click += OnDisableProxy;
+        contextMenu.Items.Add(disableProxyItem);
         
         contextMenu.Items.Add(new ToolStripSeparator());
         
@@ -132,6 +162,12 @@ public class TrayIconManager : IDisposable
                 // Silently fail if neither works
             }
         }
+    }
+
+    private void OnDisableProxy(object? sender, EventArgs e)
+    {
+        ProxyStatus.DisableProxy();
+        // Status will auto-update via registry watcher
     }
 
     private void OnQuit(object? sender, EventArgs e)

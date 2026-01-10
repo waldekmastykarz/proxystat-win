@@ -54,4 +54,27 @@ public static class ProxyStatus
             return null;
         }
     }
+
+    /// <summary>
+    /// Disables the system proxy by setting ProxyEnable to 0
+    /// </summary>
+    /// <returns>True if successful, false otherwise</returns>
+    public static bool DisableProxy()
+    {
+        try
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(InternetSettingsKey, writable: true);
+            if (key == null)
+            {
+                return false;
+            }
+
+            key.SetValue("ProxyEnable", 0, RegistryValueKind.DWord);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }

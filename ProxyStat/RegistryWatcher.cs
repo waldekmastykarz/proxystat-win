@@ -62,7 +62,7 @@ public class RegistryWatcher : IDisposable
                 // This is synchronous - it blocks until a change occurs
                 var result = RegNotifyChangeKeyValue(
                     handle,
-                    watchSubtree: false,
+                    bWatchSubtree: false,
                     RegNotifyFilter.Value,
                     IntPtr.Zero,
                     fAsynchronous: false);

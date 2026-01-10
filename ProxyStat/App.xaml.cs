@@ -6,7 +6,7 @@ namespace ProxyStat;
 /// ProxyStat - Windows System Tray Proxy Status Indicator
 /// Shows whether HTTPS proxy is enabled in Windows settings
 /// </summary>
-public partial class App : Application
+public partial class App : System.Windows.Application
 {
     private TrayIconManager? _trayIconManager;
 
