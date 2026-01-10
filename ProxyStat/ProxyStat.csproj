@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
+    <AssemblyName>ProxyStat</AssemblyName>
+    <RootNamespace>ProxyStat</RootNamespace>
+    <Version>1.0.0</Version>
+    <Authors>Waldek Mastykarz</Authors>
+    <Description>System tray app showing proxy status</Description>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <PublishReadyToRun>true</PublishReadyToRun>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ProxyWhiteActive.png" />
+    <EmbeddedResource Include="Resources\ProxyInactive.png" />
+    <EmbeddedResource Include="Resources\AppIcon.ico" />
+  </ItemGroup>
+
+</Project>
