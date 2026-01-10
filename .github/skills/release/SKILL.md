@@ -84,7 +84,8 @@ This creates a self-contained executable that runs without .NET installed.
 The build script automatically creates the zip. If done manually:
 
 ```powershell
-Compress-Archive -Path publish/* -DestinationPath "ProxyStat-vX.Y.Z-win-x64.zip"
+New-Item -ItemType Directory -Path releases -Force
+Compress-Archive -Path publish/* -DestinationPath "releases/ProxyStat-vX.Y.Z-win-x64.zip"
 ```
 
 The zip should contain:
@@ -107,7 +108,7 @@ git push origin main --tags
 The release process produces:
 - Updated version in `ProxyStat.csproj`
 - Git tag `vX.Y.Z`
-- Release zip: `ProxyStat-vX.Y.Z-win-x64.zip`
+- Release zip: `releases/ProxyStat-vX.Y.Z-win-x64.zip`
 
 ## Version History Convention
 

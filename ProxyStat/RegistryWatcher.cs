@@ -69,8 +69,9 @@ public class RegistryWatcher : IDisposable
 
                 if (result == 0 && !_cts.Token.IsCancellationRequested)
                 {
-                    // Registry changed, notify on UI thread
-                    System.Windows.Application.Current?.Dispatcher.BeginInvoke(_onChanged);
+                    // Registry changed, invoke callback directly
+                    // (our Win32 message loop handles thread safety)
+                    _onChanged();
                 }
             }
             catch (OperationCanceledException)
