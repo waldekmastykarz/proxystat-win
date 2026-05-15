@@ -2,6 +2,8 @@
 
 A Windows system tray application that shows whether the system proxy is enabled.
 
+![Windows system tray screenshot showing ProxyStat status tooltip above the taskbar overflow panel. Tooltip text reads ProxyStat - Proxy Enabled and http=localhost:8000;https=localhost:80. In the overflow panel, the orange ProxyStat icon is highlighted among other app icons, and the taskbar at the bottom shows 1:55 PM and 1/10/2026. The scene has a clean, practical, informative tone.](assets/screenshot.png)
+
 This is a Windows port of the macOS ProxyStat application.
 
 ## Features
